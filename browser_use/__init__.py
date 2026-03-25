@@ -67,6 +67,7 @@ if TYPE_CHECKING:
 	from browser_use.llm.vercel.chat import ChatVercel
 	from browser_use.sandbox import sandbox
 	from browser_use.tools.service import Controller, Tools
+	from browser_use.veto import VetoGuard, VetoConfig, VetoDecision
 
 	# Lazy imports mapping - only import when actually accessed
 _LAZY_IMPORTS = {
@@ -104,6 +105,10 @@ _LAZY_IMPORTS = {
 	'models': ('browser_use.llm.models', None),
 	# Sandbox execution
 	'sandbox': ('browser_use.sandbox', 'sandbox'),
+	# Veto integration
+	'VetoGuard': ('browser_use.veto.guard', 'VetoGuard'),
+	'VetoConfig': ('browser_use.veto.guard', 'VetoConfig'),
+	'VetoDecision': ('browser_use.veto.guard', 'VetoDecision'),
 }
 
 

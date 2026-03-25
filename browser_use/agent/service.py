@@ -195,6 +195,8 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		final_response_after_failure: bool = True,
 		llm_screenshot_size: tuple[int, int] | None = None,
 		_url_shortening_limit: int = 25,
+		# Veto integration
+		veto: Any | None = None,
 		**kwargs,
 	):
 		# Validate llm_screenshot_size
@@ -356,6 +358,7 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		self._url_shortening_limit = _url_shortening_limit
 
 		self.sensitive_data = sensitive_data
+		self.veto = veto
 
 		self.sample_images = sample_images
 
@@ -2403,6 +2406,35 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 				await self._log_action(action, action_name, i + 1, total_actions)
 
 				time_start = time.time()
+
+				# Veto pre-execution guard
+				if self.veto is not None:
+					action_params = action_data.get(action_name, {})
+					if isinstance(action_params, dict):
+						veto_params = action_params
+					else:
+						veto_params = {'value': action_params} if action_params is not None else {}
+
+					current_url = None
+					try:
+						if self.browser_session and self.browser_session._cached_browser_state_summary:
+							current_url = self.browser_session._cached_browser_state_summary.url
+					except Exception:
+						pass
+
+					veto_decision = await self.veto.validate_action(
+						action_name=action_name,
+						action_params=veto_params,
+						current_url=current_url,
+					)
+
+					if not veto_decision.allowed:
+						result = ActionResult(
+							error=f'Blocked by Veto: {veto_decision.reason}',
+							metadata={'veto_decision': veto_decision.decision, 'veto_reason': veto_decision.reason},
+						)
+						results.append(result)
+						break
 
 				result = await self.tools.act(
 					action=action,
