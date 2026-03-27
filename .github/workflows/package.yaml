@@ -21,7 +21,7 @@ permissions:
 jobs:
   build:
     name: pip-build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -39,7 +39,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, blacksmith-4vcpu-windows-2025]
         python-version: ["3.11", "3.13"]
     env:
       ANONYMIZED_TELEMETRY: 'false'

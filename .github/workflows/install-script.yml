@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-22.04]
+        os: [blacksmith-4vcpu-ubuntu-2404, ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -111,7 +111,7 @@ jobs:
 
   test-install-sh-windows:
     name: install.sh (Windows)
-    runs-on: windows-latest
+    runs-on: blacksmith-4vcpu-windows-2025
     defaults:
       run:
         shell: bash
@@ -150,7 +150,7 @@ jobs:
 
   test-uv-pip-install:
     name: uv pip install (Linux)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
 
@@ -195,7 +195,7 @@ jobs:
 
   test-uvx-run:
     name: uvx browser-use[cli] (Linux)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
 
@@ -239,7 +239,7 @@ jobs:
 
   test-uvx-pypi:
     name: uvx browser-use[cli] from PyPI
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     # Only run on main branch or manual trigger
     if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     steps:

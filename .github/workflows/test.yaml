@@ -25,7 +25,7 @@ on:
 
 jobs:
   setup-chromium:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
         run: uvx playwright install chromium --with-deps --no-shell
 
   find_tests:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 5  # Prevent hanging
     outputs:
       TEST_FILENAMES: ${{ steps.lsgrep.outputs.TEST_FILENAMES }}
@@ -80,7 +80,7 @@ jobs:
 
   tests:
     needs: [setup-chromium, find_tests]
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 4  # Reduced timeout - tests should complete quickly or retry
     env:
       IN_DOCKER: 'True'
@@ -183,7 +183,7 @@ jobs:
 
   evaluate-tasks:
     needs: setup-chromium
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 8  # Allow more time for agent eval
     env:
       IN_DOCKER: 'true'
